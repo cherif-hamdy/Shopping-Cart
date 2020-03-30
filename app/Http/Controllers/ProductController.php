@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use Alert;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -22,7 +23,6 @@ class ProductController extends Controller
 
         if (session('success')) {
             Alert::success('Success', session()->get('success'));
-            session()->forget('success');
         }
 
         $products = Product::all();
@@ -37,7 +37,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        if (Gate::allows('admin')) {
+            return view('products.create');
+        } else {
+            return abort(401, 'Un Authorized Action');
+        }
     }
 
     /**
@@ -48,19 +52,24 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'price' => 'required|numeric',
-            'image' => 'required|image'
-        ]);
 
-        Product::create([
-            'title' => $request->input('title'),
-            'price' => $request->input('price'),
-            'image' => $request->file('image')->store('uploads', 'public'),
-        ]);
+        if (Gate::allows('admin')) {
+            $request->validate([
+                'title' => 'required',
+                'price' => 'required|numeric',
+                'image' => 'required|image'
+            ]);
 
-        return redirect(route('products.index'))->with('success', 'Product Created Successfully');
+            Product::create([
+                'title' => $request->input('title'),
+                'price' => $request->input('price'),
+                'image' => $request->file('image')->store('uploads', 'public'),
+            ]);
+
+            return redirect(route('products.index'))->with('success', 'Product Created Successfully');
+        } else {
+            return abort(401, 'Un Authorized Action');
+        }
     }
 
     /**
@@ -82,7 +91,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        if (Gate::allows('admin')) {
+            return view('products.create', compact('product'));
+        } else {
+            return abort(401, 'Un Authorized Action');
+        }
     }
 
     /**
@@ -94,7 +107,33 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        if (Gate::allows('admin')) {
+            $request->validate([
+                'title' => 'required',
+                'price' => 'required|numeric'
+            ]);
+
+            if ($request->hasFile('image')) {
+                $request->validate([
+                    'image' => 'image'
+                ]);
+                $image = $request->file('image')->store('uploads', 'public');
+                $product->update([
+                    'title' => $request->title,
+                    'price' => $request->price,
+                    'image' => $image
+                ]);
+            } else {
+                $product->update([
+                    'title' => $request->title,
+                    'price' => $request->price,
+                ]);
+            }
+
+            return redirect(route('products.index'))->with('success', 'Product Updated');
+        } else {
+            return abort(401, 'Un Authorized Action');
+        }
     }
 
     /**
@@ -105,6 +144,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if (Gate::allows('admin')) {
+            $product->delete();
+            return redirect(route('products.index'))->with('success', "Product Deleted");
+        } else {
+            return abort(401, 'Un Authorized Action');
+        }
     }
 }

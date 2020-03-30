@@ -41,6 +41,7 @@
                     <ul class="navbar-nav ml-auto">
 
                         {{-- show cart link --}}
+                        @if((Auth::user() && Auth::user()->email !== 'admin@admin.com') || ! Auth::user() )
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('cart.show') }}">
                                 <i class="fas fa-cart-plus"></i>
@@ -48,6 +49,7 @@
                             </a>
                         </li>
 
+                        @endif
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -59,6 +61,11 @@
                                 </li>
                             @endif
                         @else
+                            @if (Auth::user()->email === 'admin@admin.com')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('products.create') }}">Add Product</a>
+                                </li>
+                            @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
