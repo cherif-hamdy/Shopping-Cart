@@ -17,6 +17,10 @@ Route::get('/', 'ProductController@index')->name('products.index');
 
 Route::resource('products', 'ProductController')->except(['index']);
 
+Route::get('/addToCart/{product}', 'CartController@addToCart')->name('cart.add');
+
+Route::get('/showCart', 'CartController@showCart')->name('cart.show');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

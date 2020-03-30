@@ -49,7 +49,7 @@ class ProductController extends Controller
             'image' => $request->file('image')->store('uploads', 'public'),
         ]);
 
-        return redirect(route('products.index'));
+        return redirect(route('products.index'))->with('success', 'Product Created Successfully');
     }
 
     /**

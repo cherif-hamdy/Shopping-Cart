@@ -39,10 +39,16 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
+
+                        {{-- show cart link --}}
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-cart-plus"></i> My Cart(0)</a>
+                            <a class="nav-link" href="{{ route('cart.show') }}">
+                                <i class="fas fa-cart-plus"></i>
+                                 My Cart({{ session()->has('cart') ? session()->get('cart')->totalQty : '0'}})
+                            </a>
                         </li>
+
+                        <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
