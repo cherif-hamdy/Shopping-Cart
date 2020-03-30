@@ -33,4 +33,11 @@ class CartController extends Controller
 
         return view('cart.show', compact('cart'));
     }
+
+    public function deleteCart()
+    {
+        session()->forget('cart');
+
+        return redirect(route('products.index'))->with('success', 'You Cart Is Empty Now');
+    }
 }

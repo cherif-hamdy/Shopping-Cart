@@ -21,6 +21,8 @@ Route::get('/addToCart/{product}', 'CartController@addToCart')->name('cart.add')
 
 Route::get('/showCart', 'CartController@showCart')->name('cart.show');
 
+Route::get('/deleteCart', 'CartController@deleteCart')->name('cart.delete');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

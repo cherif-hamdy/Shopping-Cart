@@ -22,7 +22,19 @@
                @endforeach
             </div>
             <div class="col-md-4">
-
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">
+                            Your Cart
+                        </h3>
+                        <div class="card-text">
+                            <h6> Total Price Is <strong>${{ $cart->totalPrice}}</strong></h6>
+                            <h6> Total Quantities <strong>{{ $cart->totalQty }}</strong></h6>
+                            <a class="btn btn-secondary text-white">Done</a>
+                            <a href="{{ route('cart.delete') }}" class="btn btn-danger text-white">Remove Cart</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             @else
             <p>The Cart Is Empty</p>

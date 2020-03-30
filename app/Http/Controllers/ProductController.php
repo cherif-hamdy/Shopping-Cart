@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Alert;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +19,12 @@ class ProductController extends Controller
      */
     public function index()
     {
+
+        if (session('success')) {
+            Alert::success('Success', session()->get('success'));
+            session()->forget('success');
+        }
+
         $products = Product::all();
 
         return view('welcome', compact('products'));

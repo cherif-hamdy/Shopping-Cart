@@ -3,13 +3,13 @@
 @section('content')
 
     <div class="container">
-        
+
         {{-- Flashing Success Message --}}
-        @if(session()->has('success'))
+        {{-- @if(session()->has('success'))
         <div class="alert alert-success">
             {{ session()->get('success') }}
         </div>
-        @endif
+        @endif --}}
 
         <div class="row">     
             @foreach ($products as $product)
