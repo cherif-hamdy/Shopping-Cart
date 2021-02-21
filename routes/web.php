@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Hello From Push And Pull Lessons
+
 Route::get('/', 'ProductController@index')->name('products.index');
 
 Route::resource('products', 'ProductController')->except(['index']);
